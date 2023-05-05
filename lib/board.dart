@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mogul/constants.dart';
 import 'boardTiles.dart';
-import 'dart:ui' as ui;
 
 class Board extends StatelessWidget {
-  const Board({Key? key}) : super(key: key);
+  Board({Key? key}) : super(key: key);
 
 
 
@@ -28,10 +28,10 @@ class Board extends StatelessWidget {
             bottom: 0,
             child: Row(
                 children: [
-                  const BoardTile(color: Colors.red, name: "Start"),
-                  BoardTile(color: Colors.pink[200]!, name: "1"),
-                  BoardTile(color: Colors.pink[200]!, name: "2"),
-                  BoardTile(color: Colors.pink[200]!, name: "3"),
+                  BoardTile(color: mainBlue, name: "Start"),
+                  BoardTile(color: orangeColor, name: "1"),
+                  BoardTile(color: orangeColor, name: "2"),
+                  BoardTile(color: orangeColor, name: "3"),
                 ]
             ),
           ),
@@ -42,9 +42,9 @@ class Board extends StatelessWidget {
             bottom: boxSize,
             child: Column(
                 children: [
-                  BoardTile(color: Colors.pink[200]!, name: "6"),
-                  BoardTile(color: Colors.pink[200]!, name: "5"),
-                  BoardTile(color: Colors.pink[200]!, name: "4"),
+                  BoardTile(color: orangeColor, name: "6"),
+                  BoardTile(color: orangeColor, name: "5"),
+                  BoardTile(color: orangeColor, name: "4"),
                 ]
             ),
           ),
@@ -55,9 +55,9 @@ class Board extends StatelessWidget {
             top: 0,
             child: Row(
                 children: [
-                  BoardTile(color: Colors.pink[200]!, name: "9"),
-                  BoardTile(color: Colors.pink[200]!, name: "8"),
-                  BoardTile(color: Colors.pink[200]!, name: "7"),
+                  BoardTile(color: orangeColor, name: "9"),
+                  BoardTile(color: orangeColor, name: "8"),
+                  BoardTile(color: orangeColor, name: "7"),
                 ]
             ),
           ),
@@ -68,15 +68,15 @@ class Board extends StatelessWidget {
             top: boxSize,
             child: Column(
                 children: [
-                  BoardTile(color: Colors.pink[200]!, name: "10"),
-                  BoardTile(color: Colors.pink[200]!, name: "Goal"),
+                  BoardTile(color: orangeColor, name: "10"),
+                  BoardTile(color: Colors.green, name: "Victory"),
                 ]
             ),
           ),
-
-
         ],
       ),
     );
   }
+
+
 }

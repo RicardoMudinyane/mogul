@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:mogul/home.dart';
 
 import 'handlers/providers.dart';
+import 'login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,12 +18,12 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<ProviderHandler>(
         create: (_)=> ProviderHandler(),
         child:  MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Mogul',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const Home(),
+          home: const LoginDemo(),
         )
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mogul/learningCards/cards.dart';
 import 'package:provider/provider.dart';
 import 'package:mogul/board.dart';
 import 'package:mogul/handlers/providers.dart';
@@ -60,15 +61,26 @@ class _HomeState extends State<GamePlay>  with SingleTickerProviderStateMixin {
     ).animate(_controller);
   }
 
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  void _handleButtonPress() {
+  void handleButtonPress() {
     _controller.forward();
+    context.read<ProviderHandler>().rotateText(1);
+
+    Future.delayed(const Duration(milliseconds: 800), () {
+      Navigator.of(context).push(_createRoute());
+    }).
+    then((value) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _controller.reverse();
+        context.read<ProviderHandler>().rotateText(0);
+      });
+    });
+
   }
 
 
@@ -79,26 +91,50 @@ class _HomeState extends State<GamePlay>  with SingleTickerProviderStateMixin {
 
     return Stack(
       children: [
+
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Consumer<ProviderHandler>(
+              builder: (ctx, value, child){
+                return Text(
+                  value.name,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[900],
+                      fontSize: 12
+                  ),
+                );
+              },
+            ),
+          )
+        ),
         Positioned(
           right: -80,
-          top: 0,
+          top: 70,
           child: Container(
             width: 200,
             height: 200,
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.lightBlue.withOpacity(.1)
+                color: Colors.lightBlue.withOpacity(.05)
             ),
           ),
         ),
 
-        // Transform(
-        //     transform: Matrix4.identity()
-        //       ..setEntry(3, 2, 0.002)
-        //       ..rotateY(perspectiveAnimation.value),
-        //     alignment: FractionalOffset.center,
-        //     child: const Board()
-        // ),
+        Positioned(
+          left: -50,
+          bottom: 200,
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.green.withOpacity(.05)
+            ),
+          ),
+        ),
 
         Align(
           alignment: Alignment.center,
@@ -108,7 +144,7 @@ class _HomeState extends State<GamePlay>  with SingleTickerProviderStateMixin {
               scale: _scaleAnimation,
               child: SlideTransition(
                   position: _translationAnimation,
-                  child: const Board()
+                  child: Board()
               ),
             ),
           ),
@@ -117,30 +153,34 @@ class _HomeState extends State<GamePlay>  with SingleTickerProviderStateMixin {
         Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(15),
                 child: Container(
                   height: 60,
                   alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      TextButton(
-                        onPressed: _handleButtonPress,
-                        child:  Text(
-                          'Start Learning',
-                          style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 3,
-                        width: width*.12,
-                        color: mainBlue,
-                      )
-                    ],
-                  ),
+                  child: Consumer<ProviderHandler>(
+                      builder: (ctx, value, child){
+                        return Column(
+                          children: [
+                            TextButton(
+                              onPressed: handleButtonPress,
+                              child:  Text(
+                                'Start Learning',
+                                style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 3,
+                              width: width*.12,
+                              color: mainBlue,
+                            )
+                          ],
+                        );
+                      }
+                  )
                 )
             )
         )
@@ -148,5 +188,23 @@ class _HomeState extends State<GamePlay>  with SingleTickerProviderStateMixin {
       ],
     );
   }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => ECards(gameLevel: 1,),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
 
